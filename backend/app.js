@@ -8,6 +8,8 @@ const { isProduction } = require('./config/keys');
 require('./models/User');
 require('./models/Post'); 
 require('./config/passport');
+require('./models/Tag');
+require('./config/passport');
 const passport = require('passport'); 
 
 
@@ -33,9 +35,11 @@ app.use(
 const usersRouter = require("./routes/api/users"); // update the import file path
 const postsRouter = require("./routes/api/posts");
 const csrfRouter = require('./routes/api/csrf');
+const answersRouter = require('./routes/api/answers');
 app.use('/api/posts', postsRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/csrf', csrfRouter);
+app.use('/api/posts/:postId/answers', answersRouter);
 
 // Security Middleware
 if (isProduction) {
