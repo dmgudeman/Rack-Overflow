@@ -8,8 +8,9 @@ const { isProduction } = require('./config/keys');
 require('./models/User');
 require('./models/Post'); 
 require('./config/passport');
+require('./models/Answer');
 require('./models/Tag');
-require('./config/passport');
+
 const passport = require('passport'); 
 
 
@@ -64,8 +65,6 @@ if (isProduction) {
   });
 }
 
-
-// Attach Express routers
 
 
 // Express custom middleware for catching all unmatched requests and formatting
