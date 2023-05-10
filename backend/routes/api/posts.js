@@ -82,7 +82,8 @@ router.post("/", requireUser, validatePostInput, async (req, res, next) => {
     try {
         let ans = [];
         let reqTags = req.body.tags;
-        
+
+  
         const tagProcess = async (el) => {
             const tag = await Tag.find({ tag: el });
 
@@ -94,24 +95,20 @@ router.post("/", requireUser, validatePostInput, async (req, res, next) => {
                 ans = ans.concat(tag);
             }
         };
-
+      if(reqTags){
         await reqTags.forEach(async (el) => {
             await tagProcess(el);
         });
-      //   const completion = await openai.createCompletion({
-      //     model: "text-davinci-003",
-      //     prompt: req.body.text,
-      //     temperature: 0.6,
-      // });
-      // console.log("COMPLETION", completion)
-
+      }
+    
+      // console.log("lllllllll", res.json({ result: completion.data.choices[0].text }));
         const newPost = new Post({
             title: req.body.title,
             text: req.body.text,
             author: req.user._id,
             tags: ans,
         });
-        console.log("AFTER NEWPOST", ans);
+       
 
         let post = await newPost.save();
         console.log("AFTER POSTSAVE", ans);
@@ -119,6 +116,10 @@ router.post("/", requireUser, validatePostInput, async (req, res, next) => {
 
         post.tags = ans;
         post = await newPost.save();
+
+      
+
+
         return res.json(post);
         // }
         // await waiting();
@@ -129,27 +130,15 @@ router.post("/", requireUser, validatePostInput, async (req, res, next) => {
 
 router.post("/open-ai", async (req, res, next) => {
     try {
-        const { prompt } = req.body;
+        const { prompt } = req.body.text;
         console.log("PROMPT", prompt);
-        // const response = await fetch("https://openai.com/v1/completions", {
-        //     method: "POST",
-        //     headers: {
-        //         Authorization:
-        //             "Bearer " + keys.openAIKey
-        //     },
-        //     body: {
-        //         model: "text-davinci-003",
-        //         prompt: "hi there",
-        //     },
-        // });
-
+      
         const completion = await openai.createCompletion({
             model: "text-davinci-003",
             prompt: prompt,
             temperature: 0.6,
         });
-        res.status(200).json({ result: completion.data.choices[0].text });
-        //
+        console.log(res.json({ result: completion.data.choices[0].text }));
     } catch (err) {
         next(err);
     }
