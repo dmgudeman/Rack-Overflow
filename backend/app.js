@@ -40,7 +40,7 @@ const answersRouter = require('./routes/api/answers');
 app.use('/api/posts', postsRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/csrf', csrfRouter);
-app.use('/api/posts/:postId/answers', answersRouter);
+app.use('/api/answers', answersRouter);
 
 // Security Middleware
 if (isProduction) {
